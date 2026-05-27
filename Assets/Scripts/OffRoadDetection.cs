@@ -3,7 +3,6 @@ using UnityEngine;
 public class OffRoadDetection : MonoBehaviour
 {
     PlayerMovement playerMovementScript;
-    [SerializeField] float offroadSpeed;
 
     void Start()
     {

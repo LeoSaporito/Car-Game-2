@@ -5,29 +5,38 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] public float currentSpeed;
     [SerializeField] public float accelerateSpeed;
+    [SerializeField] float currentSpeedLimit;
     [SerializeField] float speedLimitMax;
     [SerializeField] float speedLimitMin;
+    [SerializeField] float offroadSpeed;
     [SerializeField] float stopLimit;
+    [SerializeField] float rotateSpeed;
 
     Vector2 directionalInput;
     Vector3 position;
-
-    [SerializeField] float rotateSpeed;
     
     float currentRotation;
     float rotationDirection;
 
     public bool onOffroad;
 
+    bool canControlPlayer;
+
+
     void Start()
     {
         onOffroad = false;
+        canControlPlayer = true;
+        currentSpeedLimit = speedLimitMax;
     }
 
     void FixedUpdate()
     {
-        CarAccelerating();
-        CarTurning();
+        if (canControlPlayer)
+        { 
+            CarAccelerating();
+            CarTurning();
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -37,13 +46,28 @@ public class PlayerMovement : MonoBehaviour
 
     public void CarAccelerating()
     {
+        if (onOffroad == true)
+        {
+            currentSpeedLimit = offroadSpeed;
+            currentSpeed -= accelerateSpeed * 4;
+
+            if (currentSpeed <= offroadSpeed)
+            { 
+            currentSpeed = offroadSpeed;
+            }
+        }
+        else if(onOffroad == false) 
+        {
+            currentSpeedLimit = speedLimitMax;
+        }
+
         if (directionalInput.y > 0 && onOffroad == false)
         {
             currentSpeed += accelerateSpeed;
 
-            if (currentSpeed >= speedLimitMax)
+            if (currentSpeed >= currentSpeedLimit)
             {
-                currentSpeed = speedLimitMax;
+                currentSpeed = currentSpeedLimit;
             }
         }
         else if (directionalInput.y < 0 && onOffroad == false)
@@ -55,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
                 currentSpeed = speedLimitMin;
             }
         }
-        else if (directionalInput.y == 0 || onOffroad == true)
+        else if (directionalInput.y == 0)
         {
             if (currentSpeed > 0.1)
             {
@@ -96,5 +120,10 @@ public class PlayerMovement : MonoBehaviour
         currentRotation = rotateSpeed * Time.deltaTime * rotationDirection;
 
         transform.Rotate(0, 0, currentRotation);
+    }
+
+    public void DisableControls()
+    {
+        canControlPlayer = false;
     }
 }
