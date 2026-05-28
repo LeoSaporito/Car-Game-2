@@ -5,11 +5,13 @@ public class BarrierCollisionDetection : MonoBehaviour
     [SerializeField] ParticleSystem crashParticles;
     PlayerMovement playerMovementScript;
     TimerUI timerUIScript;
+    CrashMenuUI crashMenuUIScript;    
 
     void Start()
     {
         playerMovementScript = GetComponent<PlayerMovement>();
         timerUIScript = FindFirstObjectByType<TimerUI>();
+        crashMenuUIScript = GetComponent<CrashMenuUI>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -21,6 +23,7 @@ public class BarrierCollisionDetection : MonoBehaviour
             crashParticles.Play();
             playerMovementScript.DisableControls();
             timerUIScript.isStart = false;
+            crashMenuUIScript.DisplayCrashMenuUI();
         }
     }
 }
