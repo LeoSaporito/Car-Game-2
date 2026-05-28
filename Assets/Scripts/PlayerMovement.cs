@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public bool onOffroad;
 
     bool canControlPlayer;
-    bool finishedRace;
+    public bool finishedRace;
 
 
     void Start()
@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
     public void CarAccelerating()
     {
         Offroad();
-        //TrackCompleted();
+
 
         if (directionalInput.y > 0 && onOffroad == false)
         {

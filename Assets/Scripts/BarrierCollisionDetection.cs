@@ -18,7 +18,7 @@ public class BarrierCollisionDetection : MonoBehaviour
     {
         int layerIndex = LayerMask.NameToLayer("Barrier");
 
-        if (collision.gameObject.layer == layerIndex)
+        if (collision.gameObject.layer == layerIndex && playerMovementScript.finishedRace == false)
         {
             crashParticles.Play();
             playerMovementScript.DisableControls();

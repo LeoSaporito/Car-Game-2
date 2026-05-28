@@ -8,12 +8,14 @@ public class TimerUI : MonoBehaviour
 
     PlayerMovement playerMovementScript;
     TotalCheckpointsPassed totalCheckpointsPassedScript;
+    FinishedMenuUI finishMenuUIScript;
 
     public float timerProgress;
     void Start()
     {
         playerMovementScript = FindFirstObjectByType<PlayerMovement>();
         totalCheckpointsPassedScript = FindFirstObjectByType<TotalCheckpointsPassed>();
+        finishMenuUIScript = FindFirstObjectByType<FinishedMenuUI>();
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,16 +30,18 @@ public class TimerUI : MonoBehaviour
         if (isStart == true)
         {
             timerProgress += Time.deltaTime;
-            timerText.text = timerProgress.ToString();
 
             TimeSpan time = TimeSpan.FromSeconds(timerProgress);
             timerText.text = time.Seconds.ToString() + "." + time.Milliseconds.ToString();
         }
 
         else if (isStart == false && totalCheckpointsPassedScript.allCheckpointsPassed == true)
+        //else if (isStart == false)
         {
             timerProgress += 0;
             playerMovementScript.TrackCompleted();
+
+            finishMenuUIScript.DisplayFinishUI();
         }
     }
 }

@@ -7,6 +7,7 @@ public class CrashMenuUI : MonoBehaviour
     [SerializeField] GameObject crashMenuUI;
     [SerializeField] float crashMenuDelay;
     [SerializeField] TextMeshProUGUI checkpointsPassedText;
+    [SerializeField] GameObject checkpointsPassedUI;
 
     TotalCheckpointsPassed totalCheckpointsPassedScript;
 
@@ -19,6 +20,7 @@ public class CrashMenuUI : MonoBehaviour
     public void DisplayCrashMenuUI()
     {
         Invoke("CrashMenu", crashMenuDelay);
+        checkpointsPassedUI.SetActive(false);
     }
 
     void CrashMenu()
