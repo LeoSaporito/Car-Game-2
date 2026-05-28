@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public bool onOffroad;
 
     bool canControlPlayer;
+    bool finishedRace;
 
 
     void Start()
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         onOffroad = false;
         canControlPlayer = true;
         currentSpeedLimit = speedLimitMax;
+        finishedRace = false;
     }
 
     void FixedUpdate()
@@ -41,25 +43,21 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        directionalInput = context.ReadValue<Vector2>();
+        if (finishedRace)
+        {
+            directionalInput = new Vector2(0, 0);
+            currentSpeed -= accelerateSpeed;
+        }
+        else
+        { 
+            directionalInput = context.ReadValue<Vector2>();        
+        }
     }
 
     public void CarAccelerating()
     {
-        if (onOffroad == true)
-        {
-            currentSpeedLimit = offroadSpeed;
-            currentSpeed -= accelerateSpeed * 4;
-
-            if (currentSpeed <= offroadSpeed)
-            { 
-            currentSpeed = offroadSpeed;
-            }
-        }
-        else if(onOffroad == false) 
-        {
-            currentSpeedLimit = speedLimitMax;
-        }
+        Offroad();
+        //TrackCompleted();
 
         if (directionalInput.y > 0 && onOffroad == false)
         {
@@ -122,8 +120,31 @@ public class PlayerMovement : MonoBehaviour
         transform.Rotate(0, 0, currentRotation);
     }
 
+    public void Offroad()
+    {
+        if (onOffroad == true)
+        {
+            currentSpeedLimit = offroadSpeed;
+            currentSpeed -= accelerateSpeed * 4;
+
+            if (currentSpeed <= offroadSpeed)
+            {
+                currentSpeed = offroadSpeed;
+            }
+        }
+        else if (onOffroad == false)
+        {
+            currentSpeedLimit = speedLimitMax;
+        }
+    }
+
     public void DisableControls()
     {
         canControlPlayer = false;
+    }
+
+    public void TrackCompleted()
+    {
+        finishedRace = true;
     }
 }
